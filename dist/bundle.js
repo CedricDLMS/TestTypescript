@@ -1,0 +1,1 @@
+(()=>{"use strict";new class{constructor(t,e){this.xPostion=t/2,this.yPosition=e/2,this.element=document.getElementById("child")}init(){this.element.style.top=this.xPostion.toString(),this.element.style.left=this.yPosition.toString(),console.log(this.element)}}(1e3,800).init()})();
