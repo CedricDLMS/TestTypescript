@@ -1,3 +1,4 @@
+import path from "path";
 import { Observable } from "rxjs";
 import { fromEvent } from 'rxjs';
 import {
@@ -42,6 +43,8 @@ import {
 // });
 
 //#endregion Exo1
+
+
 
 
 //#region Exo2
@@ -109,42 +112,75 @@ class Movement{
     constructor(personne : Character){
         this.personne = personne;
     }
-    moveUp()
+    moveUp(pixel : number)
     {
-        this.personne.yPosition += 10;
+        this.personne.yPosition += pixel;
         this.personne.element.setAttribute("style", `bottom : ${this.personne.yPosition}px; left : ${this.personne.xPosition}px `);
     }
-    moveDown()
+    moveDown(pixel : number)
     {
-        this.personne.yPosition -= 10;
+        this.personne.yPosition -= pixel;
         this.personne.element.setAttribute("style", `bottom : ${this.personne.yPosition}px; left : ${this.personne.xPosition}px `);
     }
-    moveLeft()
+    moveLeft(pixel : number)
     {
-        this.personne.xPosition -= 10;
+        this.personne.xPosition -= pixel;
         this.personne.element.setAttribute("style", `bottom : ${this.personne.yPosition}px; left : ${this.personne.xPosition}px `);
     }
-    moveRight()
+    moveRight(pixel : number)
     {
-        this.personne.xPosition += 10;
+        this.personne.xPosition += pixel;
         this.personne.element.setAttribute("style", `bottom : ${this.personne.yPosition}px; left : ${this.personne.xPosition}px `);
     }
 
     movementInit(){
         document.addEventListener("keydown",(event)=>{
             if(event.key == "ArrowUp"){
-                this.moveUp();
+                this.moveUp(30);
             }
             if(event.key == "ArrowDown"){
-                this.moveDown();
+                this.moveDown(30);
             }
             if(event.key == "ArrowLeft"){
-                this.moveLeft();
+                this.moveLeft(30);
             }
             if(event.key == "ArrowRight"){
-                this.moveRight();
+                this.moveRight(30);
             }
         })
+    }
+    graviteInit(){
+        setInterval(()=>{
+            if(this.personne.yPosition >= 9){
+                this.moveDown(8);
+            }
+        },200)
+    }
+}
+
+class Enemies{
+    HealthPoints : number;
+    xPosition : number;
+    yPosition : number;
+    Element : HTMLElement;
+    constructor(healthPoints : number, xPosition: number,yPosition : number){
+        this.HealthPoints = healthPoints;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.Element = this.init(document.getElementById("container") as HTMLElement);
+    }
+    init(parentDiv : HTMLElement){
+        const creationElment = document.createElement("img");
+        creationElment.setAttribute("src","./img/invader.png");
+
+        const createParentDiv = document.createElement("div");
+        createParentDiv.setAttribute("class", "child");
+        
+        createParentDiv.appendChild(creationElment);
+
+
+        parentDiv.appendChild(createParentDiv);
+        return createParentDiv;
     }
 }
 
@@ -154,8 +190,12 @@ class Movement{
 
 const perso = new Character(1000,800);
 const move = new Movement(perso);
+
+const enemy = new Enemies(15,800,800);
+
 perso.init();
 move.movementInit();
+move.graviteInit();
 
 
 
